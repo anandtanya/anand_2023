@@ -1,0 +1,527 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 L1 Activities 4:\par
+\par
+1. Use structures to find the volume and the total surface area of the box. \par
+   You need to access the members of the structure with the help of a structure pointer:\par
+    a. With the help of (*) asterisk or indirection operator and (.) dot operator.\par
+    b. With the help of ( -> ) Arrow operator using pointer as well as dot representation.\par
+Ans - \par
+#include <stdio.h>\par
+\par
+// Define the structure for a box\par
+struct Box \{\par
+    float length;\par
+    float width;\par
+    float height;\par
+\};\par
+\par
+// Function to calculate the volume of the box\par
+float calculateVolume(struct Box* boxPtr) \{\par
+    return (*boxPtr).length * (*boxPtr).width * (*boxPtr).height;\par
+\}\par
+\par
+// Function to calculate the total surface area of the box\par
+float calculateSurfaceArea(struct Box* boxPtr) \{\par
+    return 2 * ((*boxPtr).length * (*boxPtr).width + (*boxPtr).length * (*boxPtr).height + (*boxPtr).width * (*boxPtr).height);\par
+\}\par
+\par
+int main() \{\par
+    // Declare a box structure and a pointer to the box structure\par
+    struct Box myBox;\par
+    struct Box* boxPtr;\par
+\par
+    // Initialize the box structure\par
+    myBox.length = 3.0;\par
+    myBox.width = 2.0;\par
+    myBox.height = 4.0;\par
+\par
+    // Assign the address of the box structure to the pointer\par
+    boxPtr = &myBox;\par
+\par
+    // Accessing members using (*) asterisk and (.) dot operator\par
+    float volume = calculateVolume(&myBox);\par
+    float surfaceArea = calculateSurfaceArea(&myBox);\par
+\par
+    printf("Volume using (*) and (.) operators: %.2f\\n", volume);\par
+    printf("Surface Area using (*) and (.) operators: %.2f\\n", surfaceArea);\par
+\par
+    // Accessing members using (->) arrow operator\par
+    volume = calculateVolume(boxPtr);\par
+    surfaceArea = calculateSurfaceArea(boxPtr);\par
+\par
+    printf("Volume using (->) operator: %.2f\\n", volume);\par
+    printf("Surface Area using (->) operator: %.2f\\n", surfaceArea);\par
+\par
+    return 0;\par
+\}\par
+\par
+2. Write a C program that uses functions to perform the following operations: \par
+     i) Reading a complex number \par
+     ii) Writing a complex number \par
+     iii) Addition of two complex numbers \par
+     iv) Multiplication of two complex numbers \par
+  (Note: represent complex number using a structure.\par
+Ans - \par
+#include <stdio.h>\par
+\par
+// Structure to represent a complex number\par
+struct Complex \{\par
+    float real;\par
+    float imaginary;\par
+\};\par
+\par
+// Function to read a complex number from the user\par
+void readComplex(struct Complex* complex) \{\par
+    printf("Enter the real part: ");\par
+    scanf("%f", &(complex->real));\par
+    printf("Enter the imaginary part: ");\par
+    scanf("%f", &(complex->imaginary));\par
+\}\par
+\par
+// Function to write a complex number to the console\par
+void writeComplex(struct Complex complex) \{\par
+    printf("Complex number: %.2f + %.2fi\\n", complex.real, complex.imaginary);\par
+\}\par
+\par
+// Function to add two complex numbers\par
+struct Complex addComplex(struct Complex complex1, struct Complex complex2) \{\par
+    struct Complex result;\par
+    result.real = complex1.real + complex2.real;\par
+    result.imaginary = complex1.imaginary + complex2.imaginary;\par
+    return result;\par
+\}\par
+\par
+// Function to multiply two complex numbers\par
+struct Complex multiplyComplex(struct Complex complex1, struct Complex complex2) \{\par
+    struct Complex result;\par
+    result.real = complex1.real * complex2.real - complex1.imaginary * complex2.imaginary;\par
+    result.imaginary = complex1.real * complex2.imaginary + complex1.imaginary * complex2.real;\par
+    return result;\par
+\}\par
+\par
+int main() \{\par
+    struct Complex complex1, complex2, sum, product;\par
+\par
+    // Read the first complex number\par
+    printf("Reading the first complex number:\\n");\par
+    readComplex(&complex1);\par
+\par
+    // Read the second complex number\par
+    printf("Reading the second complex number:\\n");\par
+    readComplex(&complex2);\par
+\par
+    // Write the complex numbers\par
+    printf("\\nComplex numbers:\\n");\par
+    writeComplex(complex1);\par
+    writeComplex(complex2);\par
+\par
+    // Add the complex numbers\par
+    sum = addComplex(complex1, complex2);\par
+    printf("\\nSum of the complex numbers:\\n");\par
+    writeComplex(sum);\par
+\par
+    // Multiply the complex numbers\par
+    product = multiplyComplex(complex1, complex2);\par
+    printf("\\nProduct of the complex numbers:\\n");\par
+    writeComplex(product);\par
+\par
+    return 0;\par
+\}\par
+\par
+3. Write a program using structures to calculate the difference between two time periods using a user-defined function.\par
+Ans - \par
+#include <stdio.h>\par
+\par
+// Structure to represent a time period\par
+struct Time \{\par
+    int hours;\par
+    int minutes;\par
+    int seconds;\par
+\};\par
+\par
+// Function to calculate the difference between two time periods\par
+struct Time calculateTimeDifference(struct Time start, struct Time end) \{\par
+    struct Time difference;\par
+\par
+    // Calculate the difference in seconds\par
+    int startSeconds = start.hours * 3600 + start.minutes * 60 + start.seconds;\par
+    int endSeconds = end.hours * 3600 + end.minutes * 60 + end.seconds;\par
+    int totalSeconds = endSeconds - startSeconds;\par
+\par
+    // Convert the difference back to hours, minutes, and seconds\par
+    difference.hours = totalSeconds / 3600;\par
+    totalSeconds %= 3600;\par
+    difference.minutes = totalSeconds / 60;\par
+    difference.seconds = totalSeconds % 60;\par
+\par
+    return difference;\par
+\}\par
+\par
+int main() \{\par
+    struct Time startTime, endTime, difference;\par
+\par
+    // Read the start time\par
+    printf("Enter the start time (hours minutes seconds): ");\par
+    scanf("%d %d %d", &(startTime.hours), &(startTime.minutes), &(startTime.seconds));\par
+\par
+    // Read the end time\par
+    printf("Enter the end time (hours minutes seconds): ");\par
+    scanf("%d %d %d", &(endTime.hours), &(endTime.minutes), &(endTime.seconds));\par
+\par
+    // Calculate the time difference\par
+    difference = calculateTimeDifference(startTime, endTime);\par
+\par
+    // Display the time difference\par
+    printf("\\nTime Difference: %d hours %d minutes %d seconds\\n", difference.hours, difference.minutes, difference.seconds);\par
+\par
+    return 0;\par
+\}\par
+\par
+4. write a program to Store Data for n students in Structures Dynamically. \par
+Ans - \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+\par
+// Structure to represent student data\par
+struct Student \{\par
+    char name[50];\par
+    int age;\par
+    float marks;\par
+\};\par
+\par
+int main() \{\par
+    int n;\par
+    struct Student* students;\par
+\par
+    // Read the number of students\par
+    printf("Enter the number of students: ");\par
+    scanf("%d", &n);\par
+\par
+    // Dynamically allocate memory for the students\par
+    students = (struct Student*)malloc(n * sizeof(struct Student));\par
+\par
+    // Read data for each student\par
+    for (int i = 0; i < n; i++) \{\par
+        printf("\\nEnter details for student %d:\\n", i + 1);\par
+        printf("Name: ");\par
+        scanf("%s", students[i].name);\par
+        printf("Age: ");\par
+        scanf("%d", &(students[i].age));\par
+        printf("Marks: ");\par
+        scanf("%f", &(students[i].marks));\par
+    \}\par
+\par
+    // Display the data for each student\par
+    printf("\\nStudent Data:\\n");\par
+    for (int i = 0; i < n; i++) \{\par
+        printf("\\nDetails of student %d:\\n", i + 1);\par
+        printf("Name: %s\\n", students[i].name);\par
+        printf("Age: %d\\n", students[i].age);\par
+        printf("Marks: %.2f\\n", students[i].marks);\par
+    \}\par
+\par
+    // Free the dynamically allocated memory\par
+    free(students);\par
+\par
+    return 0;\par
+\}\par
+5. Write a program to demonstrate the swapping the fields of two structures using pointers\par
+Ans -\par
+#include <stdio.h>\par
+\par
+// Structure to represent a person\par
+struct Person \{\par
+    char name[50];\par
+    int age;\par
+\};\par
+\par
+// Function to swap the fields of two structures using pointers\par
+void swapFields(struct Person* person1, struct Person* person2) \{\par
+    // Swap the name field\par
+    char tempName[50];\par
+    strcpy(tempName, person1->name);\par
+    strcpy(person1->name, person2->name);\par
+    strcpy(person2->name, tempName);\par
+\par
+    // Swap the age field\par
+    int tempAge = person1->age;\par
+    person1->age = person2->age;\par
+    person2->age = tempAge;\par
+\}\par
+\par
+int main() \{\par
+    struct Person person1, person2;\par
+\par
+    // Read the details of the first person\par
+    printf("Enter the name of person 1: ");\par
+    scanf("%s", person1.name);\par
+    printf("Enter the age of person 1: ");\par
+    scanf("%d", &(person1.age));\par
+\par
+    // Read the details of the second person\par
+    printf("Enter the name of person 2: ");\par
+    scanf("%s", person2.name);\par
+    printf("Enter the age of person 2: ");\par
+    scanf("%d", &(person2.age));\par
+\par
+    // Display the original details\par
+    printf("\\nOriginal Details:\\n");\par
+    printf("Person 1 - Name: %s, Age: %d\\n", person1.name, person1.age);\par
+    printf("Person 2 - Name: %s, Age: %d\\n", person2.name, person2.age);\par
+\par
+    // Swap the fields using pointers\par
+    swapFields(&person1, &person2);\par
+\par
+    // Display the swapped details\par
+    printf("\\nSwapped Details:\\n");\par
+    printf("Person 1 - Name: %s, Age: %d\\n", person1.name, person1.age);\par
+    printf("Person 2 - Name: %s, Age: %d\\n", person2.name, person2.age);\par
+\par
+    return 0;\par
+\}\par
+\par
+L2 Activities:\par
+\par
+1. Data Parser:\par
+   A data logger transmits the data in ascii format as shown below\par
+   "S1-T:36.5-H:100-L:50"\par
+   Write a function to populate all the data in an array of structure. The output should be like\par
+   Sensor Info:\par
+   ---------------------\par
+   Sensor ID: S1\par
+   Temperature: 36.5 C\par
+   Humidity: 100\par
+   Light Intensity: 50%\par
+   ---------------------\par
+Ans -\par
+#include <stdio.h>\par
+#include <string.h>\par
+\par
+#define MAX_SENSORS 10\par
+\par
+// Structure to represent sensor information\par
+struct SensorInfo \{\par
+    char sensorID[10];\par
+    float temperature;\par
+    int humidity;\par
+    int lightIntensity;\par
+\};\par
+\par
+// Function to parse and populate data from the input string\par
+void populateSensorData(char* dataString, struct SensorInfo* sensorArray, int* numSensors) \{\par
+    char* token;\par
+\par
+    // Tokenize the input string using "-" as the delimiter\par
+    token = strtok(dataString, "-");\par
+\par
+    // Iterate through the tokens and populate the sensor information\par
+    while (token != NULL) \{\par
+        sscanf(token, "S%[^-]-T:%f-H:%d-L:%d", sensorArray[*numSensors].sensorID, &(sensorArray[*numSensors].temperature),\par
+               &(sensorArray[*numSensors].humidity), &(sensorArray[*numSensors].lightIntensity));\par
+        (*numSensors)++;\par
+\par
+        // Get the next token\par
+        token = strtok(NULL, "-");\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    char dataString[] = "S1-T:36.5-H:100-L:50";\par
+    struct SensorInfo sensorArray[MAX_SENSORS];\par
+    int numSensors = 0;\par
+\par
+    // Parse and populate the sensor data\par
+    populateSensorData(dataString, sensorArray, &numSensors);\par
+\par
+    // Display the sensor information\par
+    printf("Sensor Info:\\n");\par
+    printf("---------------------\\n");\par
+\par
+    for (int i = 0; i < numSensors; i++) \{\par
+        printf("Sensor ID: %s\\n", sensorArray[i].sensorID);\par
+        printf("Temperature: %.1f C\\n", sensorArray[i].temperature);\par
+        printf("Humidity: %d\\n", sensorArray[i].humidity);\par
+        printf("Light Intensity: %d%%\\n", sensorArray[i].lightIntensity);\par
+        printf("---------------------\\n");\par
+    \}\par
+\par
+    return 0;\par
+\}\par
+\par
+2. Write a program to enter to Cartesian coordinate points and display the distance between them.\par
+Ans - \par
+#include <stdio.h>\par
+#include <math.h>\par
+\par
+// Structure to represent a Cartesian coordinate point\par
+struct Point \{\par
+    float x;\par
+    float y;\par
+\};\par
+\par
+// Function to calculate the distance between two points\par
+float calculateDistance(struct Point p1, struct Point p2) \{\par
+    float distance;\par
+    distance = sqrt(pow(p2.x - p1.x, 2) + pow(p2.y - p1.y, 2));\par
+    return distance;\par
+\}\par
+\par
+int main() \{\par
+    struct Point point1, point2;\par
+    float distance;\par
+\par
+    // Read the coordinates of point 1\par
+    printf("Enter the coordinates of point 1:\\n");\par
+    printf("x: ");\par
+    scanf("%f", &(point1.x));\par
+    printf("y: ");\par
+    scanf("%f", &(point1.y));\par
+\par
+    // Read the coordinates of point 2\par
+    printf("Enter the coordinates of point 2:\\n");\par
+    printf("x: ");\par
+    scanf("%f", &(point2.x));\par
+    printf("y: ");\par
+    scanf("%f", &(point2.y));\par
+\par
+    // Calculate the distance between the two points\par
+    distance = calculateDistance(point1, point2);\par
+\par
+    // Display the distance\par
+    printf("The distance between the two points is: %.2f\\n", distance);\par
+\par
+    return 0;\par
+\}\par
+3. Implement structures to read, write and compute average- marks and the students scoring above\par
+   and below the average marks for a class of N students.\par
+Ans -\par
+#include <stdio.h>\par
+\par
+#define MAX_STUDENTS 50\par
+\par
+// Structure to represent student information\par
+struct Student \{\par
+    char name[50];\par
+    float marks;\par
+\};\par
+\par
+// Function to read student details\par
+void readStudentDetails(struct Student* student, int numStudents) \{\par
+    printf("Enter details for student %d:\\n", numStudents + 1);\par
+    printf("Name: ");\par
+    scanf("%s", student->name);\par
+    printf("Marks: ");\par
+    scanf("%f", &(student->marks));\par
+    printf("\\n");\par
+\}\par
+\par
+// Function to write student details\par
+void writeStudentDetails(struct Student student) \{\par
+    printf("Name: %s\\n", student.name);\par
+    printf("Marks: %.2f\\n", student.marks);\par
+\}\par
+\par
+// Function to compute average marks\par
+float computeAverageMarks(struct Student* students, int numStudents) \{\par
+    float totalMarks = 0;\par
+\par
+    for (int i = 0; i < numStudents; i++) \{\par
+        totalMarks += students[i].marks;\par
+    \}\par
+\par
+    return totalMarks / numStudents;\par
+\}\par
+\par
+// Function to display students above and below average marks\par
+void displayStudentsAboveBelowAverage(struct Student* students, int numStudents, float averageMarks) \{\par
+    printf("Students Above Average Marks:\\n");\par
+    printf("-----------------------------\\n");\par
+    for (int i = 0; i < numStudents; i++) \{\par
+        if (students[i].marks > averageMarks) \{\par
+            writeStudentDetails(students[i]);\par
+        \}\par
+    \}\par
+    printf("\\n");\par
+\par
+    printf("Students Below Average Marks:\\n");\par
+    printf("-----------------------------\\n");\par
+    for (int i = 0; i < numStudents; i++) \{\par
+        if (students[i].marks < averageMarks) \{\par
+            writeStudentDetails(students[i]);\par
+        \}\par
+    \}\par
+    printf("\\n");\par
+\}\par
+\par
+int main() \{\par
+    struct Student students[MAX_STUDENTS];\par
+    int numStudents;\par
+    float averageMarks;\par
+\par
+    printf("Enter the number of students: ");\par
+    scanf("%d", &numStudents);\par
+\par
+    if (numStudents <= 0 || numStudents > MAX_STUDENTS) \{\par
+        printf("Invalid number of students. Program terminated.\\n");\par
+        return 0;\par
+    \}\par
+\par
+    // Read student details\par
+    for (int i = 0; i < numStudents; i++) \{\par
+        readStudentDetails(&students[i], i);\par
+    \}\par
+\par
+    // Compute average marks\par
+    averageMarks = computeAverageMarks(students, numStudents);\par
+\par
+    // Display student details\par
+    printf("\\nStudent Details:\\n");\par
+    printf("----------------\\n");\par
+    for (int i = 0; i < numStudents; i++) \{\par
+        printf("Student %d:\\n", i + 1);\par
+        writeStudentDetails(students[i]);\par
+        printf("\\n");\par
+    \}\par
+\par
+    // Display students above and below average marks\par
+    displayStudentsAboveBelowAverage(students, numStudents, averageMarks);\par
+\par
+    return 0;\par
+\}\par
+4. Write a program to pass a pointer to a structure as a parameter to a function and return back a pointer to structure \par
+   to the calling function after modifying the members of structure.\par
+Ans -\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+\par
+// Structure to represent a student\par
+struct Student \{\par
+    char name[50];\par
+    int age;\par
+\};\par
+\par
+// Function to modify the members of the structure\par
+struct Student* modifyStudent(struct Student* student) \{\par
+    printf("Enter student name: ");\par
+    scanf("%s", student->name);\par
+    printf("Enter student age: ");\par
+    scanf("%d", &(student->age));\par
+\par
+    return student;\par
+\}\par
+\par
+int main() \{\par
+    struct Student student;\par
+    struct Student* modifiedStudent;\par
+\par
+    modifiedStudent = modifyStudent(&student);\par
+\par
+    printf("\\nModified Student Details:\\n");\par
+    printf("Name: %s\\n", modifiedStudent->name);\par
+    printf("Age: %d\\n", modifiedStudent->age);\par
+\par
+    return 0;\par
+\}\par
+}
+ 

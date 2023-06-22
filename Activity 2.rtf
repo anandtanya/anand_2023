@@ -1,0 +1,379 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Day 2\par
+1.  Write a program to print exponent part of double variable in hexadecimal and binary format.\par
+lets say we have x = 0.7, the exponent in hex is 0x3FE and 0b01111111110\par
+You may use the below link to validate you output\par
+{{\field{\*\fldinst{HYPERLINK https://baseconvert.com/ieee-754-floating-point }}{\fldrslt{https://baseconvert.com/ieee-754-floating-point\ul0\cf0}}}}\f0\fs22\par
+\par
+Topics to be covered\par
+- Pointers\par
+- Bitwise Operators\par
+Ans - \par
+#include <stdio.h>\par
+\par
+void printExponent(double x) \{\par
+    unsigned long long *ptr = (unsigned long long *)&x;\par
+    unsigned long long exponent = (*ptr >> 52) & 0x7FF;\par
+    \par
+    // Printing exponent in hexadecimal format\par
+    printf("Exponent (Hex): 0x%llx\\n", exponent);\par
+    \par
+    // Printing exponent in binary format\par
+    printf("Exponent (Binary): ");\par
+    for (int i = 10; i >= 0; i--) \{\par
+        int bit = (exponent >> i) & 1;\par
+        printf("%d", bit);\par
+    \}\par
+    printf("\\n");\par
+\}\par
+\par
+int main() \{\par
+    double x = 0.7;\par
+    printExponent(x);\par
+    return 0;\par
+\}\par
+2. Write a program to swap any type of data passed to an function.\par
+\par
+Topics to be covered\par
+- Pointers\par
+- Type Casting\par
+Ans - \par
+#include <stdio.h>\par
+\par
+void swap(void* ptr1, void* ptr2, size_t size) \{\par
+    char temp[size];\par
+\par
+    // Copy the contents of ptr1 to temp\par
+    memcpy(temp, ptr1, size);\par
+\par
+    // Copy the contents of ptr2 to ptr1\par
+    memcpy(ptr1, ptr2, size);\par
+\par
+    // Copy the contents of temp to ptr2\par
+    memcpy(ptr2, temp, size);\par
+\}\par
+\par
+int main() \{\par
+    int num1 = 10, num2 = 20;\par
+    printf("Before swap: num1 = %d, num2 = %d\\n", num1, num2);\par
+\par
+    // Swapping two integers\par
+    swap(&num1, &num2, sizeof(int));\par
+    printf("After swap: num1 = %d, num2 = %d\\n", num1, num2);\par
+\par
+    float f1 = 3.14, f2 = 2.718;\par
+    printf("Before swap: f1 = %.2f, f2 = %.2f\\n", f1, f2);\par
+\par
+    // Swapping two floats\par
+    swap(&f1, &f2, sizeof(float));\par
+    printf("After swap: f1 = %.2f, f2 = %.2f\\n", f1, f2);\par
+\par
+    char ch1 = 'A', ch2 = 'B';\par
+    printf("Before swap: ch1 = %c, ch2 = %c\\n", ch1, ch2);\par
+\par
+    // Swapping two characters\par
+    swap(&ch1, &ch2, sizeof(char));\par
+    printf("After swap: ch1 = %c, ch2 = %c\\n", ch1, ch2);\par
+\par
+    return 0;\par
+\}\par
+3.  Write a program to sum every alternate elements of a given array starting for element 0\par
+For example, let's say we have a[5] = \{10, 20, 30, 40, 50\}, the result should be 10 + 30 + 50 = 90\par
+\par
+Topics to be covered\par
+- Arrays\par
+- Loops\par
+- Basic Operators\par
+Ans - \par
+#include <stdio.h>\par
+\par
+int main() \{\par
+    int a[] = \{10, 20, 30, 40, 50\};\par
+    int size = sizeof(a) / sizeof(a[0]);\par
+    int sum = 0;\par
+\par
+    for (int i = 0; i < size; i += 2) \{\par
+        sum += a[i];\par
+    \}\par
+\par
+    printf("Sum of alternate elements: %d\\n", sum);\par
+\par
+    return 0;\par
+\}\par
+4. Write a program to find total number of bits set in a given array.\par
+Say we have a array of 3 elements\par
+a[3] = \{0x1, 0xF4, 0x10001\};\par
+The total number of set bits in the given array is\par
+1 bit in 0x01, 5 in 0xF4, 2 in 0x10001, so the total is 1 + 5 + 2 = 8 bits\par
+\par
+Topics to be covered\par
+- Arrays\par
+- Loops\par
+- Bitwise Operators\par
+Ans - \par
+#include <stdio.h>\par
+\par
+int countSetBits(unsigned int num) \{\par
+    int count = 0;\par
+    \par
+    while (num) \{\par
+        count += num & 1;\par
+        num >>= 1;\par
+    \}\par
+    \par
+    return count;\par
+\}\par
+\par
+int main() \{\par
+    unsigned int a[] = \{0x1, 0xF4, 0x10001\};\par
+    int size = sizeof(a) / sizeof(a[0]);\par
+    int totalSetBits = 0;\par
+\par
+    for (int i = 0; i < size; i++) \{\par
+        totalSetBits += countSetBits(a[i]);\par
+    \}\par
+\par
+    printf("Total number of set bits: %d\\n", totalSetBits);\par
+\par
+    return 0;\par
+\}\par
+LEVEL 2\par
+1. Write a program to swap every alternate element of a given array starting for element 0\par
+For example, let's say we have a[5] = \{10, 20, 30, 40, 50\}, the result should be a[5] = \{30, 20, 10, 40, 50\}\par
+one more example a[5] = \{10, 20, 30, 40, 50, 60\}, the result should be a[5] = \{30, 20, 10, 60, 50, 40\}\par
+\par
+Topics to be covered\par
+- Arrays\par
+- Loops\par
+- Basic Operators\par
+Ans - \par
+#include <stdio.h>\par
+\par
+void swapAlternate(int arr[], int size) \{\par
+    for (int i = 0; i < size - 1; i += 2) \{\par
+        int temp = arr[i];\par
+        arr[i] = arr[i + 2];\par
+        arr[i + 2] = temp;\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    int arr1[] = \{10, 20, 30, 40, 50\};\par
+    int size1 = sizeof(arr1) / sizeof(arr1[0]);\par
+\par
+    printf("Before swap: ");\par
+    for (int i = 0; i < size1; i++) \{\par
+        printf("%d ", arr1[i]);\par
+    \}\par
+\par
+    swapAlternate(arr1, size1);\par
+\par
+    printf("\\nAfter swap: ");\par
+    for (int i = 0; i < size1; i++) \{\par
+        printf("%d ", arr1[i]);\par
+    \}\par
+\par
+    int arr2[] = \{10, 20, 30, 40, 50, 60\};\par
+    int size2 = sizeof(arr2) / sizeof(arr2[0]);\par
+\par
+    printf("\\n\\nBefore swap: ");\par
+    for (int i = 0; i < size2; i++) \{\par
+        printf("%d ", arr2[i]);\par
+    \}\par
+\par
+    swapAlternate(arr2, size2);\par
+\par
+    printf("\\nAfter swap: ");\par
+    for (int i = 0; i < size2; i++) \{\par
+        printf("%d ", arr2[i]);\par
+    \}\par
+\par
+    return 0;\par
+\}\par
+2. W.A.P to compare the items in a box, assume equal size boxes\par
+Boxes shall have unique items stored in random order\par
+Boxes are compared True if there is one to one mapping of items\par
+return the final result 1 or 0\par
+\par
+Example of Equal Boxes:\par
+A[3] = \{200, 10, -90\}\par
+B[3] = \{-90, 200, 10\}    \par
+\par
+Example of Unequal Boxes:\par
+A[3] = \{200, 9, -90\}\par
+B[3] = \{-90, 200, 10\}    \par
+\par
+Note: The array should not be sorted\par
+\par
+Topics to be covered\par
+- Arrays\par
+- Loops\par
+- Basic Operators\par
+Ans - \par
+#include <stdio.h>\par
+\par
+int compareBoxes(int box1[], int box2[], int size) \{\par
+    int count[size];\par
+\par
+    // Initialize count array with all elements as 0\par
+    for (int i = 0; i < size; i++) \{\par
+        count[i] = 0;\par
+    \}\par
+\par
+    // Count the occurrences of items in box1\par
+    for (int i = 0; i < size; i++) \{\par
+        for (int j = 0; j < size; j++) \{\par
+            if (box1[i] == box2[j] && count[j] == 0) \{\par
+                count[j] = 1;\par
+                break;\par
+            \}\par
+        \}\par
+    \}\par
+\par
+    // Check if all items in box2 are found in box1\par
+    for (int i = 0; i < size; i++) \{\par
+        if (count[i] == 0) \{\par
+            return 0;  // Mismatch found\par
+        \}\par
+    \}\par
+\par
+    return 1;  // One-to-one mapping found\par
+\}\par
+\par
+int main() \{\par
+    int box1[] = \{200, 10, -90\};\par
+    int box2[] = \{-90, 200, 10\};\par
+    int size = sizeof(box1) / sizeof(box1[0]);\par
+\par
+    int result = compareBoxes(box1, box2, size);\par
+\par
+    printf("Result: %d\\n", result);\par
+\par
+    return 0;\par
+\}\par
+3. Suppose 7 names are stored in an array of pointers names[] as shown below:\par
+ char *name[]=\{\par
+        "Santosh", "Amol", "Santosh Jain", "Kishore", "Rahul", "Amolkumar", "Hemant"\par
+          \}\par
+  Write a program to arrange these names in alphabetical order.\par
+Ans - \par
+#include <stdio.h>\par
+#include <string.h>\par
+\par
+int main() \{\par
+    char *names[] = \{\par
+        "Santosh", "Amol", "Santosh Jain", "Kishore", "Rahul", "Amolkumar", "Hemant"\par
+    \};\par
+    int size = sizeof(names) / sizeof(names[0]);\par
+\par
+    // Sort the names in alphabetical order using bubble sort\par
+    for (int i = 0; i < size - 1; i++) \{\par
+        for (int j = 0; j < size - i - 1; j++) \{\par
+            if (strcmp(names[j], names[j + 1]) > 0) \{\par
+                // Swap names[j] and names[j + 1]\par
+                char *temp = names[j];\par
+                names[j] = names[j + 1];\par
+                names[j + 1] = temp;\par
+            \}\par
+        \}\par
+    \}\par
+\par
+    // Print the sorted names\par
+    printf("Names in alphabetical order:\\n");\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("%s\\n", names[i]);\par
+    \}\par
+\par
+    return 0;\par
+\}\par
+4. Write a function xstrchr() which scans a string from beginning to end in search of a character. \par
+If the character is found, it should return a pointer to the first occurrence of the given character in the string.\par
+If the given character is not found, the function returns a NULL.\par
+The prototype of the function should be:\par
+\par
+char *xstrchr(char *string, char ch):\par
+Ans - \par
+#include <stdio.h>\par
+\par
+char *xstrchr(char *string, char ch) \{\par
+    while (*string != '\\0') \{\par
+        if (*string == ch) \{\par
+            return string;  // Character found, return pointer to it\par
+        \}\par
+        string++;  // Move to the next character in the string\par
+    \}\par
+\par
+    return NULL;  // Character not found, return NULL\par
+\}\par
+\par
+int main() \{\par
+    char str[] = "Hello, World!";\par
+    char ch1 = 'o';\par
+    char ch2 = 'z';\par
+\par
+    char *result1 = xstrchr(str, ch1);\par
+    char *result2 = xstrchr(str, ch2);\par
+\par
+    if (result1 != NULL) \{\par
+        printf("Character '%c' found at position %ld\\n", ch1, result1 - str);\par
+    \} else \{\par
+        printf("Character '%c' not found\\n", ch1);\par
+    \}\par
+\par
+    if (result2 != NULL) \{\par
+        printf("Character '%c' found at position %ld\\n", ch2, result2 - str);\par
+    \} else \{\par
+        printf("Character '%c' not found\\n", ch2);\par
+    \}\par
+\par
+    return 0;\par
+\}\par
+5.Write a program to encode any given string such that it gets converted into an unrecognizable form. \par
+Also write a decode function to get back the original string.\par
+Ans - #include <stdio.h>\par
+#include <string.h>\par
+\par
+// Function to encode a string using a substitution cipher\par
+void encode(char *string, int key) \{\par
+    int length = strlen(string);\par
+\par
+    for (int i = 0; i < length; i++) \{\par
+        if (string[i] != ' ') \{\par
+            // Apply the key to shift the character\par
+            string[i] = (string[i] + key) % 256;\par
+        \}\par
+    \}\par
+\}\par
+\par
+// Function to decode an encoded string using the same substitution cipher\par
+void decode(char *string, int key) \{\par
+    int length = strlen(string);\par
+\par
+    for (int i = 0; i < length; i++) \{\par
+        if (string[i] != ' ') \{\par
+            // Reverse the key to shift the character back to its original form\par
+            string[i] = (string[i] - key + 256) % 256;\par
+        \}\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    char message[] = "Hello, World!";\par
+    int key = 5;\par
+\par
+    printf("Original message: %s\\n", message);\par
+\par
+    // Encode the message\par
+    encode(message, key);\par
+    printf("Encoded message: %s\\n", message);\par
+\par
+    // Decode the message\par
+    decode(message, key);\par
+    printf("Decoded message: %s\\n", message);\par
+\par
+    return 0;\par
+\}\par
+}
+ 

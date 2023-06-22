@@ -1,0 +1,791 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Activity 6\par
+Level-1 :\par
+\par
+1. File Copy: Write a C program to copy a file using file operations\par
+\par
+ Ans - \par
+#include <stdio.h>\par
+\par
+int main() \{\par
+    FILE *sourceFile, *destinationFile;\par
+    char sourceFileName[100], destinationFileName[100];\par
+    char ch;\par
+\par
+    // Get the source file name from the user\par
+    printf("Enter the source file name: ");\par
+    scanf("%s", sourceFileName);\par
+\par
+    // Open the source file in read mode\par
+    sourceFile = fopen(sourceFileName, "r");\par
+    if (sourceFile == NULL) \{\par
+        printf("Unable to open the source file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    // Get the destination file name from the user\par
+    printf("Enter the destination file name: ");\par
+    scanf("%s", destinationFileName);\par
+\par
+    // Open the destination file in write mode\par
+    destinationFile = fopen(destinationFileName, "w");\par
+    if (destinationFile == NULL) \{\par
+        printf("Unable to create the destination file.\\n");\par
+        fclose(sourceFile);\par
+        return 1;\par
+    \}\par
+\par
+    // Copy the contents of the source file to the destination file\par
+    while ((ch = fgetc(sourceFile)) != EOF) \{\par
+        fputc(ch, destinationFile);\par
+    \}\par
+\par
+    // Close the files\par
+    fclose(sourceFile);\par
+    fclose(destinationFile);\par
+\par
+    printf("File copied successfully.\\n");\par
+\par
+    return 0;\par
+\}\par
+\par
+2. Case Handler:\par
+Write a C program to copy a file by considering the user option to handle the text case\par
+-u, to change file content to Upper Case\par
+-l, to change file content to Lower Case\par
+-s, to change file content to Sentence Case\par
+if no options are passed then it should be a normal copy\par
+\par
+Example, say we have a file f1 with the following content\par
+f1:\par
+-----------------------\par
+This is the file data\par
+testing Case copy\par
+application\par
+-----------------------\par
+\par
+./cp -s f1 f2\par
+f2:\par
+-----------------------\par
+This Is The Tile Data\par
+Testing Case Copy\par
+Application\par
+-----------------------\par
+\par
+./cp -l f1 f3\par
+f3:\par
+-----------------------\par
+this is the tile data\par
+testing case copy\par
+application\par
+-----------------------\par
+\par
+./cp -u f1 f4\par
+f4:\par
+-----------------------\par
+THIS IS THE FILE DATA\par
+TESTING CASE COPY\par
+APPLICATION\par
+-----------------------\par
+\par
+./cp f1 f5\par
+Should perform a normal copy\par
+Ans - \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <ctype.h>\par
+\par
+void convertToUpper(FILE *source, FILE *destination) \{\par
+    int ch;\par
+    while ((ch = fgetc(source)) != EOF) \{\par
+        fputc(toupper(ch), destination);\par
+    \}\par
+\}\par
+\par
+void convertToLower(FILE *source, FILE *destination) \{\par
+    int ch;\par
+    while ((ch = fgetc(source)) != EOF) \{\par
+        fputc(tolower(ch), destination);\par
+    \}\par
+\}\par
+\par
+void convertToSentenceCase(FILE *source, FILE *destination) \{\par
+    int ch;\par
+    int previousChar = '.';\par
+    while ((ch = fgetc(source)) != EOF) \{\par
+        if (previousChar == '.' || previousChar == '\\n') \{\par
+            fputc(toupper(ch), destination);\par
+        \} else \{\par
+            fputc(tolower(ch), destination);\par
+        \}\par
+        previousChar = ch;\par
+    \}\par
+\}\par
+\par
+int main(int argc, char *argv[]) \{\par
+    if (argc < 3) \{\par
+        printf("Usage: ./cp [-u/-l/-s] <source_file> <destination_file>\\n");\par
+        return 1;\par
+    \}\par
+\par
+    FILE *source = fopen(argv[2], "r");\par
+    if (source == NULL) \{\par
+        printf("Error opening source file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    FILE *destination = fopen(argv[3], "w");\par
+    if (destination == NULL) \{\par
+        printf("Error opening destination file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    if (argc == 4) \{\par
+        int ch;\par
+        while ((ch = fgetc(source)) != EOF) \{\par
+            fputc(ch, destination);\par
+        \}\par
+    \} else \{\par
+        char *option = argv[1];\par
+        if (option[0] == '-') \{\par
+            switch (option[1]) \{\par
+                case 'u':\par
+                    convertToUpper(source, destination);\par
+                    break;\par
+                case 'l':\par
+                    convertToLower(source, destination);\par
+                    break;\par
+                case 's':\par
+                    convertToSentenceCase(source, destination);\par
+                    break;\par
+                default:\par
+                    printf("Invalid option. Usage: ./cp [-u/-l/-s] <source_file> <destination_file>\\n");\par
+                    return 1;\par
+            \}\par
+        \} else \{\par
+            printf("Invalid option. Usage: ./cp [-u/-l/-s] <source_file> <destination_file>\\n");\par
+            return 1;\par
+        \}\par
+    \}\par
+\par
+    printf("File copied successfully.\\n");\par
+\par
+    fclose(source);\par
+    fclose(destination);\par
+\par
+    return 0;\par
+\}\par
+\par
+ \par
+\par
+3. Data Viewer:\par
+Write an application to view the log stored in data.csv\par
+Example, say you have the following data in data.csv\par
+\par
+------------------------------------\par
+EntryNo,sensorNo,Temperature,Humidity,Light,\par
+\par
+1,S1,36.5,100,50,10:30:50\par
+2,S3,30,100,50,10:30:55\par
+3,S2,-6.6,100,10,10:31:00\par
+------------------------------------\par
+\par
+Ans - \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+#define MAX_LINE_LENGTH 256\par
+\par
+void viewLog(const char *fileName) \{\par
+    FILE *file = fopen(fileName, "r");\par
+    if (file == NULL) \{\par
+        printf("File not found.\\n");\par
+        return;\par
+    \}\par
+\par
+    char line[MAX_LINE_LENGTH];\par
+    while (fgets(line, sizeof(line), file)) \{\par
+        printf("%s", line);\par
+    \}\par
+\par
+    fclose(file);\par
+\}\par
+\par
+int main(int argc, char *argv[]) \{\par
+    if (argc < 2) \{\par
+        printf("Please provide the file name.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    const char *fileName = argv[1];\par
+    viewLog(fileName);\par
+\par
+    return 0;\par
+\}\par
+\par
+\par
+a. Write a function to extract each line in the .csv file and store it in an array of structures. \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+#define MAX_LINE_LENGTH 256\par
+#define MAX_ENTRIES 100\par
+\par
+typedef struct \{\par
+    int entryNo;\par
+    char sensorNo[MAX_LINE_LENGTH];\par
+    float temperature;\par
+    int humidity;\par
+    int light;\par
+    char time[MAX_LINE_LENGTH];\par
+\} LogEntry;\par
+\par
+void viewLog(const char *fileName) \{\par
+    FILE *file = fopen(fileName, "r");\par
+    if (file == NULL) \{\par
+        printf("File not found.\\n");\par
+        return;\par
+    \}\par
+\par
+    LogEntry entries[MAX_ENTRIES];\par
+    char line[MAX_LINE_LENGTH];\par
+    int entryCount = 0;\par
+\par
+    while (fgets(line, sizeof(line), file)) \{\par
+        // Parse each line and store the values in a structure\par
+        char *token = strtok(line, ",");\par
+        if (token != NULL) \{\par
+            entries[entryCount].entryNo = atoi(token);\par
+\par
+            token = strtok(NULL, ",");\par
+            strcpy(entries[entryCount].sensorNo, token);\par
+\par
+            token = strtok(NULL, ",");\par
+            entries[entryCount].temperature = atof(token);\par
+\par
+            token = strtok(NULL, ",");\par
+            entries[entryCount].humidity = atoi(token);\par
+\par
+            token = strtok(NULL, ",");\par
+            entries[entryCount].light = atoi(token);\par
+\par
+            token = strtok(NULL, ",");\par
+            strcpy(entries[entryCount].time, token);\par
+\par
+            entryCount++;\par
+        \}\par
+    \}\par
+\par
+    fclose(file);\par
+\par
+    // Print the stored log entries\par
+    for (int i = 0; i < entryCount; i++) \{\par
+        printf("Entry No: %d\\n", entries[i].entryNo);\par
+        printf("Sensor No: %s\\n", entries[i].sensorNo);\par
+        printf("Temperature: %.2f\\n", entries[i].temperature);\par
+        printf("Humidity: %d\\n", entries[i].humidity);\par
+        printf("Light: %d\\n", entries[i].light);\par
+        printf("Time: %s\\n", entries[i].time);\par
+        printf("\\n");\par
+    \}\par
+\}\par
+\par
+int main(int argc, char *argv[]) \{\par
+    if (argc < 2) \{\par
+        printf("Please provide the file name.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    const char *fileName = argv[1];\par
+    viewLog(fileName);\par
+\par
+    return 0;\par
+\}\par
+\par
+b. Also implement functions to display the contents of the array of structures.\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+#define MAX_LINE_LENGTH 256\par
+#define MAX_ENTRIES 100\par
+\par
+typedef struct \{\par
+    int entryNo;\par
+    char sensorNo[MAX_LINE_LENGTH];\par
+    float temperature;\par
+    int humidity;\par
+    int light;\par
+    char time[MAX_LINE_LENGTH];\par
+\} LogEntry;\par
+\par
+void viewLog(const char *fileName) \{\par
+    FILE *file = fopen(fileName, "r");\par
+    if (file == NULL) \{\par
+        printf("File not found.\\n");\par
+        return;\par
+    \}\par
+\par
+    LogEntry entries[MAX_ENTRIES];\par
+    char line[MAX_LINE_LENGTH];\par
+    int entryCount = 0;\par
+\par
+    while (fgets(line, sizeof(line), file)) \{\par
+        // Parse each line and store the values in a structure\par
+        char *token = strtok(line, ",");\par
+        if (token != NULL) \{\par
+            entries[entryCount].entryNo = atoi(token);\par
+\par
+            token = strtok(NULL, ",");\par
+            strcpy(entries[entryCount].sensorNo, token);\par
+\par
+            token = strtok(NULL, ",");\par
+            entries[entryCount].temperature = atof(token);\par
+\par
+            token = strtok(NULL, ",");\par
+            entries[entryCount].humidity = atoi(token);\par
+\par
+            token = strtok(NULL, ",");\par
+            entries[entryCount].light = atoi(token);\par
+\par
+            token = strtok(NULL, ",");\par
+            strcpy(entries[entryCount].time, token);\par
+\par
+            entryCount++;\par
+        \}\par
+    \}\par
+\par
+    fclose(file);\par
+\par
+    displayLog(entries, entryCount);\par
+\}\par
+\par
+void displayLog(const LogEntry *entries, int entryCount) \{\par
+    for (int i = 0; i < entryCount; i++) \{\par
+        printf("Entry No: %d\\n", entries[i].entryNo);\par
+        printf("Sensor No: %s\\n", entries[i].sensorNo);\par
+        printf("Temperature: %.2f\\n", entries[i].temperature);\par
+        printf("Humidity: %d\\n", entries[i].humidity);\par
+        printf("Light: %d\\n", entries[i].light);\par
+        printf("Time: %s\\n", entries[i].time);\par
+        printf("\\n");\par
+    \}\par
+\}\par
+\par
+int main(int argc, char *argv[]) \{\par
+    if (argc < 2) \{\par
+        printf("Please provide the file name.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    const char *fileName = argv[1];\par
+    viewLog(fileName);\par
+\par
+    return 0;\par
+\}\par
+\par
+ \par
+\par
+Level-2 : \par
+\par
+1. Sort the above "data.csv" based on the "Temperature" field in descending order\par
+a. Use only file handling concepts\par
+Ans - \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Record \{\par
+    char sensor[10];\par
+    float temperature;\par
+    float humidity;\par
+    float light;\par
+\};\par
+\par
+int compareTemperature(const void* a, const void* b) \{\par
+    const struct Record* recordA = (const struct Record*)a;\par
+    const struct Record* recordB = (const struct Record*)b;\par
+\par
+    // Compare temperatures in descending order\par
+    if (recordA->temperature < recordB->temperature)\par
+        return 1;\par
+    else if (recordA->temperature > recordB->temperature)\par
+        return -1;\par
+    else\par
+        return 0;\par
+\}\par
+\par
+int main() \{\par
+    FILE* inputFile = fopen("data.csv", "r");\par
+    FILE* outputFile = fopen("sorted_data.csv", "w");\par
+\par
+    if (inputFile == NULL || outputFile == NULL) \{\par
+        printf("Error opening file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    struct Record records[100];  // Assuming a maximum of 100 records\par
+\par
+    char line[100];\par
+    int recordCount = 0;\par
+\par
+    // Read and parse the file contents\par
+    while (fgets(line, sizeof(line), inputFile)) \{\par
+        sscanf(line, "%[^,],%f,%f,%f", records[recordCount].sensor, &records[recordCount].temperature,\par
+               &records[recordCount].humidity, &records[recordCount].light);\par
+        recordCount++;\par
+    \}\par
+\par
+    fclose(inputFile);\par
+\par
+    // Sort the records based on temperature in descending order\par
+    qsort(records, recordCount, sizeof(struct Record), compareTemperature);\par
+\par
+    // Write the sorted data to the output file\par
+    for (int i = 0; i < recordCount; i++) \{\par
+        fprintf(outputFile, "%s,%.2f,%.2f,%.2f\\n", records[i].sensor, records[i].temperature,\par
+                records[i].humidity, records[i].light);\par
+    \}\par
+\par
+    fclose(outputFile);\par
+\par
+    printf("Data sorted and written to sorted_data.csv.\\n");\par
+\par
+    return 0;\par
+\}\par
+\par
+b. Use array of structures and file handling\par
+Ans -\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Record \{\par
+    char sensor[10];\par
+    float temperature;\par
+    float humidity;\par
+    float light;\par
+\};\par
+\par
+void swap(struct Record* a, struct Record* b) \{\par
+    struct Record temp = *a;\par
+    *a = *b;\par
+    *b = temp;\par
+\}\par
+\par
+int main() \{\par
+    FILE* inputFile = fopen("data.csv", "r");\par
+    FILE* outputFile = fopen("sorted_data.csv", "w");\par
+\par
+    if (inputFile == NULL || outputFile == NULL) \{\par
+        printf("Error opening file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    struct Record records[100];  // Assuming a maximum of 100 records\par
+\par
+    char line[100];\par
+    int recordCount = 0;\par
+\par
+    // Read and parse the file contents\par
+    while (fgets(line, sizeof(line), inputFile)) \{\par
+        sscanf(line, "%[^,],%f,%f,%f", records[recordCount].sensor, &records[recordCount].temperature,\par
+               &records[recordCount].humidity, &records[recordCount].light);\par
+        recordCount++;\par
+    \}\par
+\par
+    fclose(inputFile);\par
+\par
+    // Sort the records based on temperature in descending order using bubble sort\par
+    for (int i = 0; i < recordCount - 1; i++) \{\par
+        for (int j = 0; j < recordCount - i - 1; j++) \{\par
+            if (records[j].temperature < records[j + 1].temperature) \{\par
+                swap(&records[j], &records[j + 1]);\par
+            \}\par
+        \}\par
+    \}\par
+\par
+    // Write the sorted data to the output file\par
+    for (int i = 0; i < recordCount; i++) \{\par
+        fprintf(outputFile, "%s,%.2f,%.2f,%.2f\\n", records[i].sensor, records[i].temperature,\par
+                records[i].humidity, records[i].light);\par
+    \}\par
+\par
+    fclose(outputFile);\par
+\par
+    printf("Data sorted and written to sorted_data.csv.\\n");\par
+\par
+    return 0;\par
+\}\par
+\par
+ \par
+\par
+2. Update an entry in the data.csv based on the "EntryNo" field\par
+a. Use only file handling concepts\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Record \{\par
+    int entryNo;\par
+    char sensor[10];\par
+    float temperature;\par
+    float humidity;\par
+    float light;\par
+\};\par
+\par
+int main() \{\par
+    FILE* inputFile = fopen("data.csv", "r");\par
+    FILE* tempFile = fopen("temp.csv", "w");\par
+\par
+    if (inputFile == NULL || tempFile == NULL) \{\par
+        printf("Error opening file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    struct Record record;\par
+    char line[100];\par
+\par
+    int desiredEntryNo = 1001;  // Example: EntryNo to update\par
+    int entryFound = 0;\par
+\par
+    // Read and update the file contents\par
+    while (fgets(line, sizeof(line), inputFile)) \{\par
+        sscanf(line, "%d,%[^,],%f,%f,%f", &record.entryNo, record.sensor, &record.temperature,\par
+               &record.humidity, &record.light);\par
+\par
+        if (record.entryNo == desiredEntryNo) \{\par
+            // Update the necessary fields\par
+            // For example, update the temperature\par
+            record.temperature = 99.99;  // New temperature value\par
+\par
+            entryFound = 1;\par
+        \}\par
+\par
+        fprintf(tempFile, "%d,%s,%.2f,%.2f,%.2f\\n", record.entryNo, record.sensor, record.temperature,\par
+                record.humidity, record.light);\par
+    \}\par
+\par
+    fclose(inputFile);\par
+    fclose(tempFile);\par
+\par
+    if (!entryFound) \{\par
+        printf("Entry not found.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    // Delete the original file\par
+    remove("data.csv");\par
+\par
+    // Rename the temporary file to replace the original file\par
+    if (rename("temp.csv", "data.csv") != 0) \{\par
+        printf("Error renaming file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    printf("Entry updated in data.csv.\\n");\par
+\par
+    return 0;\par
+\}\par
+\par
+b. Use array of structures and file handling\par
+Ans -\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Record \{\par
+    int entryNo;\par
+    char sensor[10];\par
+    float temperature;\par
+    float humidity;\par
+    float light;\par
+\};\par
+\par
+int main() \{\par
+    FILE* inputFile = fopen("data.csv", "r");\par
+    FILE* outputFile = fopen("updated_data.csv", "w");\par
+\par
+    if (inputFile == NULL || outputFile == NULL) \{\par
+        printf("Error opening file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    struct Record records[100];  // Assuming a maximum of 100 records\par
+\par
+    char line[100];\par
+    int recordCount = 0;\par
+\par
+    // Read and parse the file contents\par
+    while (fgets(line, sizeof(line), inputFile)) \{\par
+        sscanf(line, "%d,%[^,],%f,%f,%f", &records[recordCount].entryNo, records[recordCount].sensor,\par
+               &records[recordCount].temperature, &records[recordCount].humidity, &records[recordCount].light);\par
+        recordCount++;\par
+    \}\par
+\par
+    fclose(inputFile);\par
+\par
+    int desiredEntryNo = 1001;  // Example: EntryNo to update\par
+    int entryFound = 0;\par
+\par
+    // Find the desired entry in the array of structures\par
+    for (int i = 0; i < recordCount; i++) \{\par
+        if (records[i].entryNo == desiredEntryNo) \{\par
+            // Update the necessary fields\par
+            // For example, update the temperature\par
+            records[i].temperature = 99.99;  // New temperature value\par
+\par
+            entryFound = 1;\par
+            break;\par
+        \}\par
+    \}\par
+\par
+    if (!entryFound) \{\par
+        printf("Entry not found.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    // Write the modified data to the output file\par
+    for (int i = 0; i < recordCount; i++) \{\par
+        fprintf(outputFile, "%d,%s,%.2f,%.2f,%.2f\\n", records[i].entryNo, records[i].sensor,\par
+                records[i].temperature, records[i].humidity, records[i].light);\par
+    \}\par
+\par
+    fclose(outputFile);\par
+\par
+    printf("Entry updated in updated_data.csv.\\n");\par
+\par
+    return 0;\par
+\}\par
+ \par
+\par
+3. Delete an entry in the file data.csv file  on the "EntryNo" field\par
+a. Use only file handling concepts\par
+Ans - \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+int main() \{\par
+    FILE* inputFile = fopen("data.csv", "r");\par
+    FILE* tempFile = fopen("temp.csv", "w");\par
+\par
+    if (inputFile == NULL || tempFile == NULL) \{\par
+        printf("Error opening file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    int entryNoToDelete = 1001;  // Example: EntryNo to delete\par
+    char line[100];\par
+    int entryFound = 0;\par
+\par
+    // Read and delete the file contents\par
+    while (fgets(line, sizeof(line), inputFile)) \{\par
+        int entryNo;\par
+        sscanf(line, "%d", &entryNo);\par
+\par
+        if (entryNo == entryNoToDelete) \{\par
+            entryFound = 1;\par
+            continue;  // Skip writing this line to the temporary file\par
+        \}\par
+\par
+        fputs(line, tempFile);  // Write the line to the temporary file\par
+    \}\par
+\par
+    fclose(inputFile);\par
+    fclose(tempFile);\par
+\par
+    if (!entryFound) \{\par
+        printf("Entry not found.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    // Delete the original file\par
+    remove("data.csv");\par
+\par
+    // Rename the temporary file to replace the original file\par
+    if (rename("temp.csv", "data.csv") != 0) \{\par
+        printf("Error renaming file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    printf("Entry deleted from data.csv.\\n");\par
+\par
+    return 0;\par
+\}\par
+\par
+b. Use array of structures and file handling\par
+Ans - \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Record \{\par
+    int entryNo;\par
+    char sensor[10];\par
+    float temperature;\par
+    float humidity;\par
+    float light;\par
+\};\par
+\par
+int main() \{\par
+    FILE* inputFile = fopen("data.csv", "r");\par
+    FILE* outputFile = fopen("updated_data.csv", "w");\par
+\par
+    if (inputFile == NULL || outputFile == NULL) \{\par
+        printf("Error opening file.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    struct Record records[100];  // Assuming a maximum of 100 records\par
+\par
+    char line[100];\par
+    int recordCount = 0;\par
+\par
+    // Read and parse the file contents\par
+    while (fgets(line, sizeof(line), inputFile)) \{\par
+        sscanf(line, "%d,%[^,],%f,%f,%f", &records[recordCount].entryNo, records[recordCount].sensor,\par
+               &records[recordCount].temperature, &records[recordCount].humidity, &records[recordCount].light);\par
+        recordCount++;\par
+    \}\par
+\par
+    fclose(inputFile);\par
+\par
+    int desiredEntryNo = 1001;  // Example: EntryNo to delete\par
+    int entryIndex = -1;\par
+\par
+    // Find the index of the desired entry in the array of structures\par
+    for (int i = 0; i < recordCount; i++) \{\par
+        if (records[i].entryNo == desiredEntryNo) \{\par
+            entryIndex = i;\par
+            break;\par
+        \}\par
+    \}\par
+\par
+    if (entryIndex == -1) \{\par
+        printf("Entry not found.\\n");\par
+        return 1;\par
+    \}\par
+\par
+    // Delete the entry by shifting the remaining elements\par
+    for (int i = entryIndex; i < recordCount - 1; i++) \{\par
+        records[i] = records[i + 1];\par
+    \}\par
+\par
+    // Write the updated data to the output file\par
+    for (int i = 0; i < recordCount - 1; i++) \{\par
+        fprintf(outputFile, "%d,%s,%.2f,%.2f,%.2f\\n", records[i].entryNo, records[i].sensor,\par
+                records[i].temperature, records[i].humidity, records[i].light);\par
+    \}\par
+\par
+    fclose(outputFile);\par
+\par
+    printf("Entry deleted in updated_data.csv.\\n");\par
+\par
+    return 0;\par
+\}\par
+}
+ 

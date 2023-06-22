@@ -1,0 +1,584 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Riched20 10.0.22621}\viewkind4\uc1 
+\pard\sa200\sl276\slmult1\f0\fs22\lang9 Activity 4\par
+Level-1:\par
+1. Assume User will be providing input in the form of a string as show below. \par
+Write a function to parse the string and initialize an array of structures. \par
+\par
+Example String : "1001 Aron 100.00" \par
+Example Structure : \par
+    struct Student\{\par
+        int rollno;\par
+        char name[20];\par
+        float marks;\par
+    \};\par
+\par
+Note: User must be able define the no. of inputs/size of the array during runtime.\par
+Ans - \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+// Structure to represent a student\par
+struct Student \{\par
+    int rollno;\par
+    char name[20];\par
+    float marks;\par
+\};\par
+\par
+// Function to parse the string and initialize an array of structures\par
+void initializeStudentArray(char* inputString, struct Student* studentArray, int size) \{\par
+    char* token;\par
+    int i = 0;\par
+\par
+    token = strtok(inputString, " ");\par
+\par
+    while (token != NULL && i < size) \{\par
+        studentArray[i].rollno = atoi(token);\par
+\par
+        token = strtok(NULL, " ");\par
+        strncpy(studentArray[i].name, token, sizeof(studentArray[i].name) - 1);\par
+\par
+        token = strtok(NULL, " ");\par
+        studentArray[i].marks = atof(token);\par
+\par
+        token = strtok(NULL, " ");\par
+        i++;\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    char inputString[100];\par
+    int numStudents;\par
+\par
+    printf("Enter the number of students: ");\par
+    scanf("%d", &numStudents);\par
+\par
+    // Flush the newline character from the input buffer\par
+    getchar();\par
+\par
+    printf("Enter the student details in the format 'rollno name marks':\\n");\par
+\par
+    struct Student* studentArray = (struct Student*)malloc(numStudents * sizeof(struct Student));\par
+\par
+    for (int i = 0; i < numStudents; i++) \{\par
+        printf("Student %d: ", i + 1);\par
+        fgets(inputString, sizeof(inputString), stdin);\par
+\par
+        // Remove the newline character from the input string\par
+        inputString[strcspn(inputString, "\\n")] = '\\0';\par
+\par
+        initializeStudentArray(inputString, &studentArray[i], 1);\par
+    \}\par
+\par
+    printf("\\nStudent Details:\\n");\par
+    printf("----------------\\n");\par
+\par
+    for (int i = 0; i < numStudents; i++) \{\par
+        printf("Student %d:\\n", i + 1);\par
+        printf("Roll No: %d\\n", studentArray[i].rollno);\par
+        printf("Name: %s\\n", studentArray[i].name);\par
+        printf("Marks: %.2f\\n", studentArray[i].marks);\par
+        printf("\\n");\par
+    \}\par
+\par
+    free(studentArray);\par
+\par
+    return 0;\par
+\}\par
+\par
+2. Write a function to initialize all members in the above array of structures\par
+Ans - \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Student \{\par
+    int rollno;\par
+    char name[20];\par
+    float marks;\par
+\};\par
+\par
+void initializeStudentArray(struct Student* studentArray, int size) \{\par
+    for (int i = 0; i < size; i++) \{\par
+        studentArray[i].rollno = 0;\par
+        strcpy(studentArray[i].name, "");\par
+        studentArray[i].marks = 0.0;\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    int numStudents;\par
+\par
+    printf("Enter the number of students: ");\par
+    scanf("%d", &numStudents);\par
+\par
+    struct Student* studentArray = (struct Student*)malloc(numStudents * sizeof(struct Student));\par
+\par
+    initializeStudentArray(studentArray, numStudents);\par
+\par
+    printf("Student Details:\\n");\par
+    printf("----------------\\n");\par
+\par
+    for (int i = 0; i < numStudents; i++) \{\par
+        printf("Student %d:\\n", i + 1);\par
+        printf("Roll No: %d\\n", studentArray[i].rollno);\par
+        printf("Name: %s\\n", studentArray[i].name);\par
+        printf("Marks: %.2f\\n", studentArray[i].marks);\par
+        printf("\\n");\par
+    \}\par
+\par
+    free(studentArray);\par
+\par
+    return 0;\par
+\}\par
+\par
+3. Write a function to display all members in the above array of structures\par
+Ans-\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Student \{\par
+    int rollno;\par
+    char name[20];\par
+    float marks;\par
+\};\par
+\par
+void displayStudentArray(struct Student* studentArray, int size) \{\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("Student %d:\\n", i + 1);\par
+        printf("Roll No: %d\\n", studentArray[i].rollno);\par
+        printf("Name: %s\\n", studentArray[i].name);\par
+        printf("Marks: %.2f\\n", studentArray[i].marks);\par
+        printf("\\n");\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    int numStudents;\par
+\par
+    printf("Enter the number of students: ");\par
+    scanf("%d", &numStudents);\par
+\par
+    struct Student* studentArray = (struct Student*)malloc(numStudents * sizeof(struct Student));\par
+\par
+    // Assume the studentArray is populated with data\par
+    // ...\par
+\par
+    printf("Student Details:\\n");\par
+    printf("----------------\\n");\par
+\par
+    displayStudentArray(studentArray, numStudents);\par
+\par
+    free(studentArray);\par
+\par
+    return 0;\par
+\}\par
+\par
+\par
+4. Write a function to sort the array of structures in descending order based on marks \par
+Ans - \par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Student \{\par
+    int rollno;\par
+    char name[20];\par
+    float marks;\par
+\};\par
+\par
+int compareByMarks(const void* a, const void* b) \{\par
+    const struct Student* studentA = (const struct Student*)a;\par
+    const struct Student* studentB = (const struct Student*)b;\par
+\par
+    if (studentA->marks < studentB->marks) \{\par
+        return 1; // Return positive value to sort in descending order\par
+    \} else if (studentA->marks > studentB->marks) \{\par
+        return -1; // Return negative value to sort in descending order\par
+    \} else \{\par
+        return 0;\par
+    \}\par
+\}\par
+\par
+void sortStudentArray(struct Student* studentArray, int size) \{\par
+    qsort(studentArray, size, sizeof(struct Student), compareByMarks);\par
+\}\par
+\par
+void displayStudentArray(struct Student* studentArray, int size) \{\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("Student %d:\\n", i + 1);\par
+        printf("Roll No: %d\\n", studentArray[i].rollno);\par
+        printf("Name: %s\\n", studentArray[i].name);\par
+        printf("Marks: %.2f\\n", studentArray[i].marks);\par
+        printf("\\n");\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    int numStudents;\par
+\par
+    printf("Enter the number of students: ");\par
+    scanf("%d", &numStudents);\par
+\par
+    struct Student* studentArray = (struct Student*)malloc(numStudents * sizeof(struct Student));\par
+\par
+    // Assume the studentArray is populated with data\par
+    // ...\par
+\par
+    printf("Student Details (Before Sorting):\\n");\par
+    printf("--------------------------------\\n");\par
+\par
+    displayStudentArray(studentArray, numStudents);\par
+\par
+    sortStudentArray(studentArray, numStudents);\par
+\par
+    printf("Student Details (After Sorting):\\n");\par
+    printf("-------------------------------\\n");\par
+\par
+    displayStudentArray(studentArray, numStudents);\par
+\par
+    free(studentArray);\par
+\par
+    return 0;\par
+\}\par
+\par
+5. Write a function to perform a search operation on the array of structures based on name of the student\par
+Ans-\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Student \{\par
+    int rollno;\par
+    char name[20];\par
+    float marks;\par
+\};\par
+\par
+int searchStudentByName(const struct Student* studentArray, int size, const char* searchName) \{\par
+    for (int i = 0; i < size; i++) \{\par
+        if (strcmp(studentArray[i].name, searchName) == 0) \{\par
+            return i; // Return the index of the matching student\par
+        \}\par
+    \}\par
+\par
+    return -1; // Return -1 if student name is not found\par
+\}\par
+\par
+void displayStudent(const struct Student* student) \{\par
+    printf("Roll No: %d\\n", student->rollno);\par
+    printf("Name: %s\\n", student->name);\par
+    printf("Marks: %.2f\\n", student->marks);\par
+    printf("\\n");\par
+\}\par
+\par
+int main() \{\par
+    int numStudents;\par
+\par
+    printf("Enter the number of students: ");\par
+    scanf("%d", &numStudents);\par
+\par
+    struct Student* studentArray = (struct Student*)malloc(numStudents * sizeof(struct Student));\par
+\par
+    // Assume the studentArray is populated with data\par
+    // ...\par
+\par
+    char searchName[20];\par
+    printf("Enter the name to search: ");\par
+    scanf("%s", searchName);\par
+\par
+    int searchIndex = searchStudentByName(studentArray, numStudents, searchName);\par
+\par
+    if (searchIndex != -1) \{\par
+        printf("Student Found:\\n");\par
+        printf("--------------\\n");\par
+        displayStudent(&studentArray[searchIndex]);\par
+    \} else \{\par
+        printf("Student not found.\\n");\par
+    \}\par
+\par
+    free(studentArray);\par
+\par
+    return 0;\par
+\}\par
+\par
+ \par
+\par
+Level-2:\par
+1. Write a function to add a member at the end of the above array of structures\par
+Note : Code must use Dynamic Memory concept\par
+Ans-\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+struct Student \{\par
+    int rollno;\par
+    char name[20];\par
+    float marks;\par
+\};\par
+\par
+void addStudent(struct Student** studentArray, int* size) \{\par
+    (*size)++; // Increase the size of the array\par
+\par
+    // Reallocate memory for the increased size\par
+    struct Student* newArray = (struct Student*)realloc(*studentArray, (*size) * sizeof(struct Student));\par
+    if (newArray == NULL) \{\par
+        printf("Error: Memory allocation failed.\\n");\par
+        return;\par
+    \}\par
+\par
+    *studentArray = newArray;\par
+\par
+    struct Student* newStudent = &(*studentArray)[(*size) - 1]; // Get the pointer to the new student\par
+\par
+    printf("Enter the roll number: ");\par
+    scanf("%d", &(newStudent->rollno));\par
+\par
+    printf("Enter the name: ");\par
+    scanf("%s", newStudent->name);\par
+\par
+    printf("Enter the marks: ");\par
+    scanf("%f", &(newStudent->marks));\par
+\par
+    printf("New student added successfully.\\n");\par
+\}\par
+\par
+void displayStudentArray(struct Student* studentArray, int size) \{\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("Student %d:\\n", i + 1);\par
+        printf("Roll No: %d\\n", studentArray[i].rollno);\par
+        printf("Name: %s\\n", studentArray[i].name);\par
+        printf("Marks: %.2f\\n", studentArray[i].marks);\par
+        printf("\\n");\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    int numStudents;\par
+\par
+    printf("Enter the number of students: ");\par
+    scanf("%d", &numStudents);\par
+\par
+    struct Student* studentArray = (struct Student*)malloc(numStudents * sizeof(struct Student));\par
+\par
+    // Assume the studentArray is populated with data\par
+    // ...\par
+\par
+    printf("Student Details (Before Adding New Student):\\n");\par
+    printf("--------------------------------------------\\n");\par
+\par
+    displayStudentArray(studentArray, numStudents);\par
+\par
+    addStudent(&studentArray, &numStudents);\par
+\par
+    printf("Student Details (After Adding New Student):\\n");\par
+    printf("-------------------------------------------\\n");\par
+\par
+    displayStudentArray(studentArray, numStudents);\par
+\par
+    free(studentArray);\par
+\par
+    return 0;\par
+\}\par
+\par
+2. Write a function to delete a member at the start of the above array of structures\par
+Note : Code must use Dynamic Memory concept\par
+Ans -\par
+#include <stdio.h>\par
+#include <stdlib.h>\par
+#include <string.h>\par
+\par
+// Structure definition\par
+struct Member \{\par
+    int id;\par
+    char name[20];\par
+\};\par
+\par
+// Function to delete a member at the start of the array of structures\par
+struct Member* deleteMember(struct Member *members, int *size) \{\par
+    if (*size == 0) \{\par
+        // Array is already empty\par
+        return members;\par
+    \}\par
+\par
+    // Allocate memory for a new array of structures with size-1\par
+    struct Member *newMembers = (struct Member*)malloc((*size - 1) * sizeof(struct Member));\par
+    if (newMembers == NULL) \{\par
+        // Memory allocation failed\par
+        return members;\par
+    \}\par
+\par
+    // Copy the elements after the first member to the new array\par
+    memcpy(newMembers, members + 1, (*size - 1) * sizeof(struct Member));\par
+\par
+    // Free the memory occupied by the original array\par
+    free(members);\par
+\par
+    // Decrement the size\par
+    (*size)--;\par
+\par
+    return newMembers;\par
+\}\par
+\par
+int main() \{\par
+    // Array of structures\par
+    struct Member *members = NULL;\par
+    int size = 0;\par
+\par
+    // Add members to the array\par
+    members = (struct Member*)realloc(members, (size + 1) * sizeof(struct Member));\par
+    members[size].id = 1;\par
+    strcpy(members[size].name, "John");\par
+    size++;\par
+\par
+    members = (struct Member*)realloc(members, (size + 1) * sizeof(struct Member));\par
+    members[size].id = 2;\par
+    strcpy(members[size].name, "Alice");\par
+    size++;\par
+\par
+    members = (struct Member*)realloc(members, (size + 1) * sizeof(struct Member));\par
+    members[size].id = 3;\par
+    strcpy(members[size].name, "Bob");\par
+    size++;\par
+\par
+    // Display the members before deletion\par
+    printf("Members before deletion:\\n");\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("Member %d: ID=%d, Name=%s\\n", i, members[i].id, members[i].name);\par
+    \}\par
+\par
+    // Delete the member at the start\par
+    members = deleteMember(members, &size);\par
+\par
+    // Display the members after deletion\par
+    printf("\\nMembers after deletion:\\n");\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("Member %d: ID=%d, Name=%s\\n", i, members[i].id, members[i].name);\par
+    \}\par
+\par
+    // Free the memory occupied by the array\par
+    free(members);\par
+\par
+    return 0;\par
+\}\par
+\par
+\par
+\par
+3. Write a function to swap 2 members in different indexes (based on user input) in the above array of structures\par
+Ans -\par
+#include <stdio.h>\par
+\par
+// Structure definition\par
+struct Member \{\par
+    int id;\par
+    char name[20];\par
+\};\par
+\par
+// Function to swap two members in an array of structures\par
+void swapMembers(struct Member members[], int index1, int index2) \{\par
+    struct Member temp = members[index1];\par
+    members[index1] = members[index2];\par
+    members[index2] = temp;\par
+\}\par
+\par
+int main() \{\par
+    // Array of structures\par
+    struct Member members[] = \{\par
+        \{1, "John"\},\par
+        \{2, "Alice"\},\par
+        \{3, "Bob"\},\par
+        \{4, "Emily"\},\par
+        \{5, "Michael"\}\par
+    \};\par
+    int size = sizeof(members) / sizeof(members[0]);\par
+\par
+    // Display the members before swapping\par
+    printf("Members before swapping:\\n");\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("Member %d: ID=%d, Name=%s\\n", i, members[i].id, members[i].name);\par
+    \}\par
+\par
+    // Get the indexes to swap from the user\par
+    int index1, index2;\par
+    printf("Enter the indexes of the members to swap: ");\par
+    scanf("%d %d", &index1, &index2);\par
+\par
+    // Perform the swap\par
+    swapMembers(members, index1, index2);\par
+\par
+    // Display the members after swapping\par
+    printf("\\nMembers after swapping:\\n");\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("Member %d: ID=%d, Name=%s\\n", i, members[i].id, members[i].name);\par
+    \}\par
+\par
+    return 0;\par
+\}\par
+\par
+3. Write a function to rotate the above array of structures by K positions\par
+Ans -\par
+#include <stdio.h>\par
+\par
+// Structure definition\par
+struct Member \{\par
+    int id;\par
+    char name[20];\par
+\};\par
+\par
+// Function to rotate an array of structures by K positions\par
+void rotateArray(struct Member members[], int size, int k) \{\par
+    // Normalize the rotation value to be within the array size\par
+    k = k % size;\par
+\par
+    // Rotate the array elements by K positions\par
+    for (int i = 0; i < k; i++) \{\par
+        // Store the last element\par
+        struct Member temp = members[size - 1];\par
+\par
+        // Shift elements to the right\par
+        for (int j = size - 1; j > 0; j--) \{\par
+            members[j] = members[j - 1];\par
+        \}\par
+\par
+        // Place the last element at the beginning\par
+        members[0] = temp;\par
+    \}\par
+\}\par
+\par
+int main() \{\par
+    // Array of structures\par
+    struct Member members[] = \{\par
+        \{1, "John"\},\par
+        \{2, "Alice"\},\par
+        \{3, "Bob"\},\par
+        \{4, "Emily"\},\par
+        \{5, "Michael"\}\par
+    \};\par
+    int size = sizeof(members) / sizeof(members[0]);\par
+\par
+    // Display the members before rotation\par
+    printf("Members before rotation:\\n");\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("Member %d: ID=%d, Name=%s\\n", i, members[i].id, members[i].name);\par
+    \}\par
+\par
+    // Get the number of positions to rotate from the user\par
+    int k;\par
+    printf("Enter the number of positions to rotate: ");\par
+    scanf("%d", &k);\par
+\par
+    // Perform the rotation\par
+    rotateArray(members, size, k);\par
+\par
+    // Display the members after rotation\par
+    printf("\\nMembers after rotation:\\n");\par
+    for (int i = 0; i < size; i++) \{\par
+        printf("Member %d: ID=%d, Name=%s\\n", i, members[i].id, members[i].name);\par
+    \}\par
+\par
+    return 0;\par
+\}\par
+}
+ 
